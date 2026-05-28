@@ -1,26 +1,40 @@
 # 🚢 Port Container Tracker
 
-> A full-stack application for monitoring, analysing, and reporting on container terminal operations — built to demonstrate end-to-end IT Analyst–Developer skills.
+A full-stack terminal operations dashboard for monitoring container movements, vessel calls, and yard performance at a container terminal.
+
+Built around the operational reality of a modern container port: real-time KPI tracking, automated dwell time alerts, gate transaction processing, and BI-ready reporting — all connected to a star schema data warehouse.
 
 ---
 
-## Why this project?
+## What it does
 
-Container terminals like CSP Zeebrugge run on real-time data: vessel arrivals, container movements, gate transactions, and KPI dashboards for operations teams. This project simulates a **Terminal Operations Support System** — the kind of internal tooling that sits alongside a TOS (Terminal Operating System) like Navis N4.
+### Live KPI Dashboard
+Browser-based dashboard showing TEU throughput, vessel turnaround time, yard block occupancy, and gate transaction volume. Updates live and flags anomalies automatically.
 
-It covers the full stack required for the role:
+### Container Dwell Time Analysis
+Python script that scans the yard for containers exceeding their target dwell time, ranks them by severity, and generates a daily CSV + chart report for the operations team.
 
-| Requirement (vacancy) | Demonstrated here |
+### Gate Transaction Processor
+Groovy transformer that validates and normalises incoming truck gate messages (ISO 6346 container IDs, EDI format) before they enter the terminal operating system.
+
+### Data Warehouse & BI Queries
+Oracle SQL star schema designed for operational reporting. Includes KPI queries for throughput, turnaround, and occupancy — ready to connect to Power BI or Tableau.
+
+### Process Analysis
+End-to-end AS-IS → TO-BE analysis of the container release workflow, with user stories, data model changes, and a phased implementation plan.
+
+---
+
+## Tech stack
+
+| Layer | Technologies |
 |---|---|
-| Java / Groovy development | REST API in Java + Groovy data transformer |
-| JavaScript / HTML / CSS | Interactive dashboard frontend |
-| Python | Data analysis & automated reporting scripts |
-| SQL / Oracle | Schema design + analytical queries |
-| Git | This repo — branching, commits, PRs |
-| BI reporting | KPI dashboard with Chart.js |
-| Process analysis | `/docs/process-analysis.md` |
-| Data warehouse | Star schema design in `/sql/` |
-| End-user focus | UI built around operations team workflows |
+| Frontend | HTML5, CSS3, JavaScript, Chart.js |
+| Backend | Java 17, Spring Boot |
+| Data transformation | Groovy |
+| Data analysis & reporting | Python 3.11, pandas, matplotlib |
+| Database | Oracle SQL (star schema) |
+| CI | GitHub Actions |
 
 ---
 
@@ -28,92 +42,41 @@ It covers the full stack required for the role:
 
 ```
 port-container-tracker/
-│
-├── frontend/               # Browser dashboard (HTML + JS + CSS)
-│   ├── index.html          # Main KPI dashboard
-│   ├── app.js              # Dashboard logic & Chart.js visualisations
-│   └── style.css           # Terminal operations UI styling
-│
-├── backend/                # Java REST API (Spring Boot)
-│   ├── ContainerService.java
-│   ├── VesselController.java
-│   └── GateTransactionGroovy.groovy   # Groovy data transformer
-│
-├── data-analysis/          # Python analysis scripts
-│   ├── dwell_time_analysis.py         # Container dwell time stats
-│   ├── throughput_forecast.py         # Weekly TEU forecasting
-│   └── report_generator.py           # Automated PDF/CSV reporting
-│
-├── sql/                    # Oracle SQL — schema + queries
-│   ├── schema.sql                     # Star schema (data warehouse)
-│   ├── kpi_queries.sql                # Operational KPI queries
-│   └── sample_data.sql                # Realistic test data
-│
+├── frontend/                   # KPI dashboard (HTML + JS + CSS)
+├── backend/
+│   ├── ContainerService.java   # Core business logic
+│   └── GateTransactionTransformer.groovy
+├── data-analysis/
+│   └── dwell_time_analysis.py  # Automated dwell time reporting
+├── sql/
+│   └── schema_and_kpis.sql     # Star schema + analytical queries
 └── docs/
-    ├── process-analysis.md            # AS-IS / TO-BE analysis
-    ├── architecture.md                # System design decisions
-    └── user-stories.md                # End-user requirements
+    └── process-analysis.md     # AS-IS / TO-BE process analysis
 ```
-
----
-
-## Tech stack
-
-- **Backend:** Java 17, Spring Boot, Groovy
-- **Frontend:** Vanilla JavaScript, HTML5, CSS3, Chart.js
-- **Data analysis:** Python 3.11, pandas, matplotlib, reportlab
-- **Database:** Oracle SQL (compatible with PostgreSQL for local dev)
-- **Version control:** Git, GitHub Actions CI
 
 ---
 
 ## Getting started
 
-### Frontend (no install needed)
+**Frontend** — open directly in browser:
 ```bash
-# Just open in browser
 open frontend/index.html
 ```
 
-### Python analysis
+**Python analysis:**
 ```bash
-pip install pandas matplotlib reportlab
+pip install pandas matplotlib
 python data-analysis/dwell_time_analysis.py
 ```
 
-### Backend (Java)
+**Backend:**
 ```bash
-# Requires Java 17 + Maven
+# Java 17 + Maven required
 mvn spring-boot:run
-# API runs on http://localhost:8080
 ```
 
 ---
 
-## Key features
+## Contact
 
-### 1. Live KPI Dashboard
-Real-time view of terminal performance: TEU throughput, vessel turnaround time, gate transaction volume, and yard occupancy — the metrics an operations team actually monitors.
-
-### 2. Container Dwell Time Analysis
-Python script that identifies containers exceeding target dwell times, flags them by priority, and generates an automated daily report — reducing manual follow-up work.
-
-### 3. Vessel Turnaround Reporting
-SQL queries against a star schema data warehouse to track port-call performance over time. Designed to feed directly into a BI tool (Power BI, Tableau, or similar).
-
-### 4. Gate Transaction Processor (Groovy)
-Groovy transformer that validates and normalises incoming truck gate data before it enters the TOS — the kind of integration work typical in a terminal IT environment.
-
----
-
-## Process analysis example
-
-See [`/docs/process-analysis.md`](/docs/process-analysis.md) for a full AS-IS → TO-BE analysis of a manual container release process — converted into an automated workflow, with requirements elicitation notes and a proposed data model.
-
----
-
-## About
-
-Built as a portfolio project demonstrating full-stack IT Analyst–Developer skills relevant to port terminal environments. The domain knowledge is based on publicly available information about container terminal operations, Navis TOS architecture, and standard port KPIs.
-
-**Contact:** [your-email@example.com] | [linkedin.com/in/yourprofile]
+Philippe Godfroy — [linkedin.com/in/yourprofile](https://linkedin.com/in/yourprofile)
